@@ -1,0 +1,61 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DOEBOT Panel</title>
+  <style>
+    body {
+      background: #111;
+      color: #0f0;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+    }
+    h1 {
+      color: #0f0;
+    }
+    button {
+      background: #0f0;
+      color: #000;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    #status {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #0ff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Panel DOEBOT</h1>
+  <button onclick="controlBot('start')">Start Bot</button>
+  <button onclick="controlBot('stop')">Stop Bot</button>
+  <div id="status">Status: <span id="bot-status">Unknown</span></div>
+
+  <script>
+    function controlBot(action) {
+      fetch('/bot/' + action, { method: 'POST' })
+        .then(res => res.text())
+        .then(msg => {
+          document.getElementById('bot-status').textContent = msg;
+        });
+    }
+
+    // Auto fetch status on load
+    fetch('/bot/status')
+      .then(res => res.text())
+      .then(status => {
+        document.getElementById('bot-status').textContent = status;
+      });
+  </script>
+</body>
+</html>
